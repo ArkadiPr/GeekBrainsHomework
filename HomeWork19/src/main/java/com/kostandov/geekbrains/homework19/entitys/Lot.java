@@ -1,5 +1,6 @@
 package com.kostandov.geekbrains.homework19.entitys;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -31,6 +32,7 @@ public class Lot {
     private User user;
 
     @Version
+    @Setter(AccessLevel.NONE)
     private Long version;
 
 
