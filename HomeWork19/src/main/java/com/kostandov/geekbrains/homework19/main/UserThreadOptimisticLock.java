@@ -36,15 +36,20 @@ public class UserThreadOptimisticLock implements Runnable {
 
             try {
                 session.getTransaction().commit();
+                Thread.sleep(1);
                 System.out.println("Thread "+user_id+" committed");
-            } catch (OptimisticLockException e) {
+            } catch (OptimisticLockException oe) {
                 session.getTransaction().rollback();
                 j--;
-                System.out.println("Something going wrong: " + e.getMessage());
+                System.out.println("Something going wrong: " + oe.getMessage());
                 System.out.println("Thread "+user_id+" rolled back");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
 
             session.close();
+
+
 
         }
         countDownLatch.countDown();
