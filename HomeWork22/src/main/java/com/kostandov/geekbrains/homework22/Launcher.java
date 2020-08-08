@@ -5,10 +5,13 @@ import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.webapp.WebAppContext;
 import org.hibernate.SessionFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 
 import java.net.URL;
 import java.security.ProtectionDomain;
 
+@Configuration
 public class Launcher {
 
     @Bean
@@ -25,9 +28,6 @@ public class Launcher {
     public static void main(String[] args) throws Exception {
         Server server = new Server(8081);
         PrepareData.forcePrepareData();
-
-
-
 
         ProtectionDomain domain = com.kostandov.geekbrains.homework22.Launcher.class.getProtectionDomain();
         URL location = domain.getCodeSource().getLocation();
