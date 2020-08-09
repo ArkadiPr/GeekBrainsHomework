@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Spring MVC GeekApp</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+<div th:replace="~{navigation :: navigation(AllItems)}"/>
+<h1>Список товаров:</h1>
+<form th:action="@{'/allitems'}" method="get">
+    <br><label>Найти товар по id</label></br>
+    <label>id</label>
+    <input type="number" name="idItem" >
+    <button class="btn btn-primary" type="submit">Найти</button>
+</form>
+<span th:unless="${items.size() > 0}">Товаров пока нет, попробуйте добавить новый. </span>
+<table class="table" th:if="${items.size() > 0}">
+    <thead>
+    <tr>
+        <td>Id</td>
+        <td>Наименование</td>
+        <td>Цена</td>
+        <td>Действия</td>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr th:each="i : ${items}">
+        <td th:text="${i.id}"></td>
+        <td th:text="${i.title}"></td>
+        <td th:text="${i.price}"></td>
+        <td>
+            <a class="btn btn-danger" th:href="@{'items/remove/' + ${i.id}}">Удалить</a>
+            <a class="btn btn-secondary" th:href="@{'item/edit/' + ${i.id}}">Редактировать</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<span th:text="'Количество товаров: ' + ${@itemService.getItems().size()}"/>
+<form th:action="@{'/items/add'}" method="post">
+    <label>Добавить новый товар: </label>
+    <label>title</label>
+    <input type="text" name="title">
+    <label>price</label>
+    <input type="number" name="price">
+    <button class="btn btn-primary" type="submit">Создать</button>
+</form>
+<form th:action="@{'/allitems'}" method="get">
+    <button class="btn btn-primary" type="submit">Показать все</button>
+</form>
+
+</body>
+</html>
