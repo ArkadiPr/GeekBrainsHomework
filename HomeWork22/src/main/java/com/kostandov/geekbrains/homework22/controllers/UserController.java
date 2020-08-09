@@ -27,12 +27,5 @@ public class UserController {
         return "redirect:/allusers";
     }
 
-    @GetMapping("/users/find{id}")
-    public String findUserById(@PathVariable Long id, Model model){
-        User currentUser=userService.getUser(id);
-        model.addAttribute("user",currentUser);
-        return "redirect:/allusers";
-
-    }
 
 }
