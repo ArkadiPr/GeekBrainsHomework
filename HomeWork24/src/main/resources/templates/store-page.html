@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>Book store</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container">
+    <div th:replace="~{navigation :: navigation(BookStore)}"/>
+
+    <h1>Магазин книг</h1>
+    <br>
+    <h4>Фильтр:</h4>
+    <form th:action="@{'/books'}" method="get">
+        <div class="form-group">
+            <label>Максимальная цена</label>
+            <input th:value="${maxPrice}" type="number" class="form-control form-control-sm"  name="maxPrice">
+            <label>Название</label>
+            <input th:value="${titlePart}" type="text" class="form-control form-control-sm" name="titlePart">
+            <input th:checked="${paramGenres.contains('DETECTIVE')}" type="checkbox" id="DETECTIVE" name="genre" value="DETECTIVE">
+            <label  for="DETECTIVE">DETECTIVE</label>
+            <input th:checked="${paramGenres.contains('FANTASY')}" type="checkbox" id="FANTASY" name="genre" value="FANTASY">
+            <label for="FANTASY">FANTASY</label>
+            <input th:checked="${paramGenres.contains('FANTASTIC')}" type="checkbox" id="FANTASTIC" name="genre" value="FANTASTIC">
+            <label for="FANTASTIC">FANTASTIC</label>
+        </div>
+        <button type="submit" class="btn btn-primary">Применить</button>
+    </form>
+
+    <br>
+    <br>
+    <h4>Список книг:</h4>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <td>Название</td>
+            <td>Описание</td>
+            <td>Цена</td>
+            <td>Год издания</td>
+            <td>Жанр</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="b : ${books}">
+            <td th:text="${b.title}"></td>
+            <td th:text="${b.description}"></td>
+            <td th:text="${b.price}"></td>
+            <td th:text="${b.publishYear}"></td>
+            <td th:text="${b.genre}"></td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div  class="table-pagination" style="width: min-content; margin: 0 auto;">
+    <ul  class="pagination">
+        <li th:class="${books.getNumber() eq 0} ? 'disabled' : '' ">
+            <a class="page-link" th:if="${not books.isFirst()}" th:href="@{'books?p='+${books.getNumber()-1}+${paramsLine}}">Previous</a>
+            <a class="page-link" th:if="${books.isFirst()}" href="javascript:void(0);" >Previous</a>
+        </li>
+
+        <li class="pagination" th:each="pageNo : ${pageNumbers}" th:class="${books.getNumber() eq pageNo}? 'active' : ''">
+            <a class="page-link" th:if="${books.getNumber() eq pageNo}" href="javascript:void(0);">
+                <span th:text="${pageNo+1}"></span>
+            </a>
+            <a class="page-link" th:if="${not (books.getNumber()  eq pageNo)}" th:href="@{'books?p='+${pageNo}+${paramsLine}}">
+                <span th:text="${pageNo+1}"></span>
+            </a>
+
+        </li>
+        <li class="page-item" th:class="${books.getNumber() + 1 ge books.totalPages} ? 'disabled' : ''" th:disabled="${books.isLast()}">
+            <a class="page-link" th:if="${not books.isLast()}" th:href="@{'books?p='+${1+books.getNumber()}+${paramsLine}}">Next</a>
+            <a class="page-link" th:if="${books.isLast()}" href="javascript:void(0);">Next</a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>
